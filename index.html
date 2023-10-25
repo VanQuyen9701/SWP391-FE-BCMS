@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>Bird Club Management System</title>
+    <link rel="icon" href="images/logo.png" type="image/png" sizes="16x16">
+
+    <link rel="stylesheet" href="css/main.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/color.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+        /* Styling for the list items (li) */
+        ul.notificationz {
+            list-style: none;
+            padding: 0;
+            /* Set a fixed height and add a scrollbar */
+            height: 400px;
+            overflow-y: auto;
+        }
+
+        ul.notificationz li {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        ul.notificationz li:last-child {
+            border-bottom: none;
+        }
+
+        /* Styling for the mesg-info div */
+        .mesg-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Styling for the span elements inside mesg-info */
+        .mesg-info span {
+            margin-bottom: 5px;
+        }
+
+        /* Additional styles to improve presentation */
+        .icofont-bell-alt {
+            font-size: 24px;
+            margin-right: 5px;
+        }
+
+        h4 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Optional: Customize the colors */
+        body {
+            background-color: #f8f8f8;
+        }
+
+        ul.notificationz li {
+            background-color: #fff;
+        }
+
+        /* Optional: Add some spacing */
+        .tab-pane {
+            margin-top: 20px;
+        }
+    </style>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f8f8;
+        }
+
+        #createPostForm {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #createPostForm label {
+            font-weight: bold;
+        }
+
+        #createPostForm input[type="text"],
+        #createPostForm textarea,
+        #createPostForm select,
+        #createPostForm input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        #createPostForm input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        #eventFields {
+            display: none;
+        }
+
+        #multiComboBox {
+            height: 100px;
+            overflow-y: auto;
+        }
+
+        #previewMedia img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        #previewMedia img:last-child {
+            margin-right: 0;
+        }
+
+        #createPostForm input[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #createPostForm input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .post-newmeta {
+            max-height: 400px;
+            /* Set the maximum height of the popup content */
+            overflow-y: auto;
+            /* Add a vertical scrollbar when content overflows */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-loader" id="page-loader">
+
+        <div class="loader"><span class="loader-item"></span><span class="loader-item"></span><span
+                class="loader-item"></span><span class="loader-item"></span><span class="loader-item"></span><span
+                class="loader-item"></span><span class="loader-item"></span><span class="loader-item"></span>
+            <span class="loader-item"></span><span class="loader-item"></span>
+        </div>
+
+    </div>
+    <!-- page loader -->
+    <div class="theme-layout">
+
+        <div class="responsive-header">
+            <div class="logo res"><img src="images/logo.png" alt=""><span>Bird Club</span></div>
+            <div class="user-avatar mobile">
+                <a href="profile.html" title="View Profile"><img alt="" src="" id="image-profile" ></a>
+                <div class="name">
+                    <h4 id="full-name"></h4>
+                    <span></span>
+                </div>
+            </div>
+            <div class="right-compact">
+
+                <div class="res-search">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-search">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg></span>
+                </div>
+
+            </div>
+            <div class="restop-search">
+                <span class="hide-search"><i class="icofont-close-circled"></i></span>
+                <form method="post">
+                    <input type="text" placeholder="Search...">
+                </form>
+            </div>
+        </div><!-- responsive header -->
+
+        <header class="">
+            <div class="topbar stick">
+                <div class="logo"><img src="images/logo.png" alt=""><span>Bird Club</span></div>
+                <div class="searches">
+                    <form method="post" id="searchform">
+                        <input type="text" placeholder="Search..." id="searchInput">
+                        <button type="submit"><i class="icofont-search"></i></button>
+                        <span class="cancel-search"><i class="icofont-close"></i></span>
+                        <!-- <div class="recent-search">
+                            <h4 class="recent-searches">Your's Recent Search</h4>
+                            <ul class="so-history">
+                                <li>
+                                    <div class="searched-user">
+                                        <figure><img src="images/resources/user1.jpg" alt=""></figure>
+                                        <span>Chim cảnh</span>
+                                    </div>
+                                    <span class="trash"><i class="icofont-close-circled"></i></span>
+                                </li>
+                                <li>
+                                    <div class="searched-user">
+                                        <figure><img src="images/resources/user2.jpg" alt=""></figure>
+                                        <span>bồ câu</span>
+                                    </div>
+                                    <span class="trash"><i class="icofont-close-circled"></i></span>
+                                </li>
+                                <li>
+                                    <div class="searched-user">
+                                        <figure><img src="images/resources/user3.jpg" alt=""></figure>
+                                        <span>chim nhỏ</span>
+                                    </div>
+                                    <span class="trash"><i class="icofont-close-circled"></i></span>
+                                </li>
+                                <li>
+                                    <div class="searched-user">
+                                        <figure><img src="images/resources/user4.jpg" alt=""></figure>
+                                        <span>sẻ</span>
+                                    </div>
+                                    <span class="trash"><i class="icofont-close-circled"></i></span>
+                                </li>
+                                <li>
+                                    <div class="searched-user">
+                                        <figure><img src="images/resources/user5.jpg" alt=""></figure>
+                                        <span>chim sẻ</span>
+                                    </div>
+                                    <span class="trash"><i class="icofont-close-circled"></i></span>
+                                </li>
+                            </ul>
+                        </div> -->
+                    </form>
+                </div>
+                <ul class="web-elements">
+                    <li>
+                        <div class="user-dp">
+                            <a href="profile.html" title="">
+                                <img alt="" src="" id="image">
+                                <div class="name">
+                                    <h4 id="fullname"></h4>
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="index.html" title="Home" data-toggle="tooltip">
+                            <i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="mesg-notif" href="#" title="Notifications" data-toggle="tooltip">
+                            <i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-bell">
+                                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                </svg></i>
+                        </a>
+                        <span></span>
+                    </li>
+                    <li>
+                        <a href="#" title="">
+                            <i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-grid">
+                                    <rect x="3" y="3" width="7" height="7"></rect>
+                                    <rect x="14" y="3" width="7" height="7"></rect>
+                                    <rect x="14" y="14" width="7" height="7"></rect>
+                                    <rect x="3" y="14" width="7" height="7"></rect>
+                                </svg>
+                            </i>
+                        </a>
+                        <ul class="dropdown">
+                            <li><a href="profile.html" title=""><i class="icofont-user-alt-3"></i> Your Profile</a></li>
+                            <!-- <li><a href="help-faq.html" title=""><i class="icofont-question-circle"></i> Help</a></li> -->
+                            <li><a class="dark-mod" href="#" title=""><i class="icofont-moon"></i> Dark Mode</a></li>
+                            <li><a href="settings.html" title=""><i class="icofont-gear"></i> Setting</a></li>
+                            <!-- <li><a href="privacy-n-policy.html" title=""><i class="icofont-notepad"></i> Privacy</a> -->
+                            </li>
+                            <li class="logout"><a id="logoutButton" title=""><i class="icofont-power"></i> Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <!-- header -->
+
+
+        <section>
+            <div class="white-bg">
+                <div class="container-fluid">
+                    <div class="menu-caro">
+                        <div class="row">
+                            <div class="col-lg-4">
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="page-caro">
+                                    <div class="link-item">
+                                        <a class="active" href="index.html" title="">
+                                            <i class="">
+                                                <svg class="feather feather-zap" stroke-linejoin="round"
+                                                    stroke-linecap="round" stroke-width="2" stroke="currentColor"
+                                                    fill="none" viewBox="0 0 24 24" height="24" width="24"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                                                </svg>
+                                            </i>
+                                            <p>Newsfeed</p>
+                                        </a>
+                                    </div>
+                                    <div class="link-item">
+                                        <a href="event-page.html" title="">
+                                            <i class="">
+                                                <svg class="feather feather-airplay" stroke-linejoin="round"
+                                                    stroke-linecap="round" stroke-width="2" stroke="currentColor"
+                                                    fill="none" viewBox="0 0 24 24" height="24" width="24"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1" />
+                                                    <polygon points="12 15 17 21 7 21 12 15" />
+                                                </svg></i>
+                                            <p>Events</p>
+                                        </a>
+                                    </div>
+                                    <div class="link-item">
+                                        <a href="blog.html" title="">
+                                            <i class=""><svg class="feather feather-layout" stroke-linejoin="round"
+                                                    stroke-linecap="round" stroke-width="2" stroke="currentColor"
+                                                    fill="none" viewBox="0 0 24 24" height="24" width="24"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <rect ry="2" rx="2" height="18" width="18" y="3" x="3" />
+                                                    <line y2="9" x2="21" y1="9" x1="3" />
+                                                    <line y2="9" x2="9" y1="21" x1="9" />
+                                                </svg></i>
+                                            <p>Blog</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- carousel menu -->
+
+        <section>
+            <div class="gap">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="page-contents" class="row merged20">
+                                <div class="col-lg-3">
+                                    <aside class="sidebar static left">
+                                        <div class="widget whitish low-opacity">
+                                            <img src="images/time-clock.png" alt="">
+                                            <div class="bg-image"
+                                                style="background-image: url(images/resources/time-bg.jpg)"></div>
+                                            <div class="date-time">
+                                                <div class="realtime">
+                                                    <span id="hours">00</span>
+                                                    <span id="point">:</span>
+                                                    <span id="min">00</span>
+                                                </div>
+                                                <span id="date"></span>
+                                            </div>
+                                        </div>
+                                        <div class="widget">
+                                            <h4 class="widget-title">Recent Events <a class="see-all" href="event-page.html"
+                                                    title="">See All</a></h4>
+
+                                            <ul class="recent-links" id="postList">
+                                                <!-- Posts will be dynamically added here -->
+                                            </ul>
+
+                                        </div>
+                                        <!-- recent blog -->
+
+                                    </aside>
+                                </div>
+
+
+                                <div class="col-lg-6">
+                                    <div class="main-wraper">
+                                        <span class="new-title">Create New Post</span>
+                                        <div class="new-post">
+                                            <form method="post">
+                                                <i class="icofont-pen-alt-1"></i>
+                                                <input type="text" placeholder="Create New Post">
+                                            </form>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="user-post" id="userpost">
+
+                                    </div>
+
+                                    <div class="side-slide">
+                                        <span class="popup-closed"><i class="icofont-close"></i></span>
+                                        <div class="slide-meta">
+                                            <ul class="nav nav-tabs slide-btns">
+                                                <li class="nav-item"><a class="active"
+                                                        data-toggle="tab">Notifications</a></li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane fade active show" id="notifications">
+                                                    <h4><i class="icofont-bell-alt"></i> Notifications</h4>
+                                                    <ul class="notificationz" id="notificationsList">
+                                                        <!-- Notifications will be dynamically added here -->
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        var id = sessionStorage.getItem("loggedInMember");
+                                        var mem = JSON.parse(id);
+                                        var memID = mem.memberId;
+                                        const endpointi = "https://localhost:7206/api/Notification/get-noti-user?memberId="; // Replace this with the actual API endpoint
+
+                                        // Function to fetch notifications from the API
+                                        async function fetchNotifications(memID) {
+                                            try {
+                                                const response = await fetch(`${endpointi}${memID}`);
+                                                const data = await response.json();
+                                                return data.data;
+                                            } catch (error) {
+                                                console.error("Error fetching notifications:", error);
+                                                return [];
+                                            }
+                                        }
+
+                                        // Function to generate HTML for a single notification
+                                        function generateNotificationHTML(notification) {
+                                            const { notificationContent, notificationDateTime } = notification;
+                                            return `
+                                            <li>
+                                              <div class="mesg-info">
+                                                <span>${notificationContent}</span>
+                                                <span>${new Date(notificationDateTime).toLocaleString()}</span>
+                                              </div>
+                                            </li>
+                                          `;
+                                        }
+
+                                        // Function to display notifications on the page
+                                        async function displayNotifications() {
+                                            const memberId = "Mem40080c3"; // Replace this with the actual member ID from the session
+                                            const notificationsList = document.getElementById("notificationsList");
+                                            notificationsList.innerHTML = "<li>Loading notifications...</li>";
+
+                                            const notifications = await fetchNotifications(memID);
+
+                                            if (notifications.length === 0) {
+                                                notificationsList.innerHTML = "<li>No notifications found.</li>";
+                                            } else {
+                                                const notificationsHTML = notifications.map(generateNotificationHTML).join("");
+                                                notificationsList.innerHTML = notificationsHTML;
+                                            }
+                                        }
+
+                                        // Call the function to display notifications when the page loads
+                                        displayNotifications();
+                                    </script>
+
+
+
+                                    <!-- <div class="loadmore">
+                                        <div class="sp sp-bars"></div>
+                                        <a href="#" title="" data-ripple="">Load More..</a>
+                                    </div> -->
+                                    <!-- loadmore buttons -->
+                                </div>
+                                <div class="col-lg-3">
+                                    <aside class="sidebar static right">
+                                        <!-- <div class="widget">
+                                            <h4 class="widget-title">Your Groups</h4>
+                                            <ul class="ak-groups">
+                                                <li>
+                                                    <figure><img src="images/resources/your-group1.jpg" alt=""></figure>
+                                                    <div class="your-grp">
+                                                        <h5><a href="group-detail.html" title="">Good Group</a></h5>
+                                                        <a href="#" title=""><i
+                                                                class="icofont-bell-alt"></i>Notifilactions
+                                                            <span>13</span></a>
+                                                        <a href="group-feed.html" title="" class="promote">view feed</a>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <figure><img src="images/resources/your-group2.jpg" alt=""></figure>
+                                                    <div class="your-grp">
+                                                        <h5><a href="group-detail.html" title="">E-course Group</a></h5>
+                                                        <a href="#" title=""><i
+                                                                class="icofont-bell-alt"></i>Notifilactions
+                                                            <span>13</span></a>
+                                                        <a href="group-feed.html" title="" class="promote">view feed</a>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div> -->
+                                        <!-- Your groups -->
+
+
+
+                                        <!-- event widget -->
+
+                                    </aside>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- content -->
+
+        <figure class="bottom-mockup"><img src="images/footer.png" alt=""></figure>
+        <div class="bottombar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <span class="">&copy; copyright All rights reserved by Bird Club</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- bottombar -->
+
+        <div class="post-new-popup">
+            <div class="popup" style="width: 800px;">
+                <span class="popup-closed"><i class="icofont-close"></i></span>
+                <div class="popup-meta">
+                    <div class="popup-head">
+                        <h5><i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-plus">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg></i>Create New Post
+                        </h5>
+                    </div>
+                    <div class="post-new">
+                        <div class="post-newmeta">
+
+                            <form id="createPostForm">
+                                <label for="title">Title:</label><br>
+                                <input type="text" id="title" name="title" required><br><br>
+
+                                <label for="description">Description:</label><br>
+                                <textarea id="description" name="description" rows="4" cols="50"
+                                    required></textarea><br><br>
+
+                                <label for="isEvent">Is Event:</label>
+                                <input type="checkbox" id="isEvent" name="isEvent"><br><br>
+
+                                <div id="eventFields" style="display: none;">
+                                    <label for="eventLocation">Event Location:</label><br>
+                                    <input type="text" id="eventLocation" name="eventLocation"><br><br>
+
+                                    <label for="eventStartDate">Event Start Date:</label><br>
+                                    <input type="datetime-local" id="eventStartDate" name="eventStartDate"><br><br>
+
+                                    <label for="eventEndDate">Event End Date:</label><br>
+                                    <input type="datetime-local" id="eventEndDate" name="eventEndDate"><br><br>
+
+                                    
+                                </div>
+                                <label for="birdType">Bird Type:</label><br>
+                                    <select id="birdType">
+                                        <!-- Options for bird types will be filled dynamically through JavaScript -->
+                                    </select>
+                                    <br><br>
+                                <label for="categoryID">Category :</label><br>
+                                <select id="multiComboBox" multiple>
+                                    <!-- Các tùy chọn sẽ được điền vào đây sau khi lấy dữ liệu -->
+                                </select>
+                                <br><br>
+
+                                <label for="linkMedia">Media </label><br>
+                                <input type="file" id="linkMedia" name="linkMedia" multiple><br><br>
+                                <div id="previewMedia"></div><br>
+
+                                <input type="submit" value="Create Post">
+                            </form>
+                            <script>
+                                const isEventCheckbox = document.getElementById("isEvent");
+                                const eventFieldsDiv = document.getElementById("eventFields");
+
+                                isEventCheckbox.addEventListener("change", () => {
+                                    if (isEventCheckbox.checked) {
+                                        eventFieldsDiv.style.display = "block";
+                                    } else {
+                                        eventFieldsDiv.style.display = "none";
+                                    }
+                                });
+                                const endpoint2 = "https://localhost:7206/api/Category";
+
+                                // Hàm lấy danh sách category từ API
+                                const getCategories = async () => {
+                                    const response = await fetch(`${endpoint2}/All-Category`);
+                                    if (!response.ok) {
+                                        throw new Error("Invalid Request");
+                                    } else {
+                                        const data = await response.json();
+                                        return data.data;
+                                    }
+                                };
+
+                                // Hàm điền dữ liệu vào MultiComboBox
+                                const fillMultiComboBox = async () => {
+                                    const multiComboBox = document.getElementById("multiComboBox");
+
+                                    try {
+                                        const categories = await getCategories();
+                                        categories.forEach(category => {
+                                            const option = document.createElement("option");
+                                            option.value = category.categoryId;
+                                            option.textContent = category.categoryName;
+                                            multiComboBox.appendChild(option);
+                                        });
+                                    } catch (error) {
+                                        console.error("Error filling MultiComboBox:", error);
+                                    }
+                                };
+
+                                // Gọi hàm fillMultiComboBox để điền dữ liệu vào MultiComboBox khi trang được load
+                                fillMultiComboBox();
+
+                                const endpointtt = "https://localhost:7206/api/BirdType";
+
+                                // Hàm lấy danh sách category từ API
+                                const getBirdTypes = async () => {
+                                    const response = await fetch(`${endpointtt}/All-bird`);
+                                    if (!response.ok) {
+                                        throw new Error("Invalid Request");
+                                    } else {
+                                        const data = await response.json();
+                                        console.log(data);
+                                        return data.data; // Return the array of bird types directly
+                                    }
+                                };
+                                const fillBirdTypeComboBox = async () => {
+                                    const birdTypeComboBox = document.getElementById("birdType");
+                                    
+                                        const birdTypes = await getBirdTypes();
+                                        birdTypes.forEach(birdType => {
+                                            const option = document.createElement("option");
+                                            option.value = birdType.birdTypeId;
+                                            option.textContent = birdType.birdTypeName;
+                                            birdTypeComboBox.appendChild(option);
+                                        });
+                                    
+                                };
+
+                                fillBirdTypeComboBox();
+
+                            </script>
+                            <script type="module">
+
+                                // Import the functions you need from the SDKs you need
+                                import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+                                import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
+                                import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-storage.js"; // Thêm dòng này
+
+                                // Your web app's Firebase configuration
+                                // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+                                const firebaseConfig = {
+                                    apiKey: "AIzaSyBSmYdFThKNYigjDxj42PeM95J7aDBSAI0",
+                                    authDomain: "bcms-196c0.firebaseapp.com",
+                                    projectId: "bcms-196c0",
+                                    storageBucket: "bcms-196c0.appspot.com",
+                                    messagingSenderId: "202968346986",
+                                    appId: "1:202968346986:web:5258ec686fd1880c95b513",
+                                    measurementId: "G-HTJGQEQLKW"
+                                };
+
+                                // Initialize Firebase
+                                const app = initializeApp(firebaseConfig);
+                                const analytics = getAnalytics(app);
+
+                                // Function to upload image to Firebase Storage and get the download URL
+                                const uploadImageToStorage = async (file) => {
+                                    const storage = getStorage(); // Khởi tạo Firebase Storage
+
+                                    try {
+                                        const storageRef = ref(storage, `images/${file.name}`); // Tạo tham chiếu đến vị trí lưu trữ hình ảnh
+                                        await uploadBytes(storageRef, file); // Tải hình ảnh lên Firebase Storage
+                                        const downloadURL = await getDownloadURL(storageRef); // Lấy đường dẫn tải xuống của hình ảnh đã tải lên
+                                        return downloadURL; // Trả về đường dẫn tải xuống
+                                    } catch (error) {
+                                        console.error("Error uploading image to Firebase Storage:", error);
+                                        throw error;
+                                    }
+                                };
+
+                                // Sau khi có đường dẫn tải xuống hình ảnh, bạn có thể sử dụng nó như bạn đã làm trong đoạn mã JavaScript hiện tại của bạn.
+
+                                // Hàm được gọi khi người dùng nhấn nút "Lấy dữ liệu"
+                                const getSelectedCategories = () => {
+                                    const selectedCategories = Array.from(document.querySelectorAll("#multiComboBox option:checked"));
+                                    const selectedCategoryIds = selectedCategories.map(option => option.value);
+                                    // Điền danh sách category vào trường "Category ID (comma-separated)"
+                                    document.getElementById("categoryID").value = selectedCategoryIds.join(",");
+                                };
+
+                                const endpoint = "https://localhost:7206/api/Post";
+
+                                const createPost = async (data) => {
+                                    const response = await fetch(`${endpoint}/create-post`, {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify(data),
+                                    });
+                                    if (!response.ok) {
+                                        throw new Error("Invalid Request");
+                                    } else {
+                                        return response.json();
+                                    }
+                                };
+
+                                const linkMediaInput = document.getElementById("linkMedia");
+                                const previewMedia = document.getElementById("previewMedia");
+                                linkMediaInput.addEventListener("change", () => {
+                                    previewMedia.innerHTML = ""; // Xóa các hình ảnh hiển thị trước đó (nếu có)
+                                    const selectedMedia = Array.from(linkMediaInput.files);
+                                    selectedMedia.forEach((file) => {
+                                        const objectURL = URL.createObjectURL(file); // Tạo liên kết đối tượng (object URL) từ file hình ảnh
+                                        const imgElement = document.createElement("img");
+                                        imgElement.src = objectURL;
+                                        imgElement.style.width = "100px"; // Tùy chỉnh kích thước hiển thị hình ảnh
+                                        previewMedia.appendChild(imgElement);
+                                    });
+                                });
+
+                                const createPostForm = document.getElementById("createPostForm");
+                                var id = sessionStorage.getItem("loggedInMember");
+                                var mem = JSON.parse(id);
+                                var memID = mem.memberId;
+                                createPostForm.addEventListener("submit", async (event) => {
+                                    event.preventDefault();
+
+                                    const title = document.getElementById("title").value;
+                                    const description = document.getElementById("description").value;
+                                    const eventLocation = document.getElementById("eventLocation").value;
+                                    const eventStartDate = new Date(document.getElementById("eventStartDate").value);
+                                    const eventEndDate = new Date(document.getElementById("eventEndDate").value);
+                                    //const memberId = document.getElementById("memberId").value;
+                                    const memberId = memID;
+                                    const selectedCategoryIds = Array.from(document.querySelectorAll("#multiComboBox option:checked")).map(option => option.value);
+                                    const categoryIDs = selectedCategoryIds.map(id => ({ categoryID: id }));
+
+                                    const birdTypeSelect = document.getElementById("birdType");
+                                    const selectedBirdTypeIds = Array.from(birdTypeSelect.selectedOptions).map(option => option.value);
+                                    const birdTypeIDs = selectedBirdTypeIds.map(id => ({ birdTypeId: id }));
+
+                                    const mediaLinksInput = document.getElementById("linkMedia");
+                                    const mediaLinks = mediaLinksInput.files;
+                                    const media = [];
+
+                                    // Đưa tệp hình ảnh vào mảng media
+                                    for (let i = 0; i < mediaLinks.length; i++) {
+                                        const file = mediaLinks[i];
+                                        const downloadURL = await uploadImageToStorage(file); // Gọi function uploadImageToStorage để tải hình ảnh lên Firebase Storage
+                                        media.push({ linkMedia: downloadURL }); // Đưa đường dẫn tải xuống của hình ảnh vào mảng media
+                                    }
+
+                                    const isEvent = document.getElementById("isEvent").checked;
+                                    const postData = {
+                                        postTitle: title,
+                                        postDescription: description,
+                                        postIsEvent: isEvent,
+                                        eventLocation: isEvent ? eventLocation : "",
+                                        eventStartDate: isEvent ? eventStartDate.toISOString() : "",
+                                        eventEndDate: isEvent ? eventEndDate.toISOString() : "",
+                                        memberId: memberId,
+                                        categories: categoryIDs,
+                                        birdTypes: birdTypeIDs,
+                                        media: media,
+                                    };
+
+
+                                    try {
+                                        const response = await createPost(postData);
+                                        console.log("Post created successfully:", response);
+                                        // Do something with the response if needed
+                                        window.location.href = "index.html";
+                                    } catch (error) {
+                                        console.error("Error creating post:", error.message);
+                                    }
+                                });
+
+
+                            </script>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="new-question-popup">
+            <div class="popup">
+                <span class="popup-closed"><i class="icofont-close"></i></span>
+                <div class="popup-meta">
+                    <div class="popup-head">
+                        <h5><i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-help-circle">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg></i> Report post</h5>
+                    </div>
+                    <div class="post-new">
+                        <form method="post" class="c-form">
+
+                            <input type="text" placeholder="Report Title">
+                            <textarea placeholder="Write report"></textarea>
+
+                            <!-- <select>
+                                <option>Select Your Question Type</option>
+                                <option>Article</option>
+                                <option>Book</option>
+                                <option>Chapter</option>
+                                <option>Code</option>
+                                <option>conference Paper</option>
+                                <option>Cover Page</option>
+                                <option>Data</option>
+                                <option>Exprement Finding</option>
+                                <option>Method</option>
+                                <option>Poster</option>
+                                <option>Preprint</option>
+                                <option>Technicial Report</option>
+                                <option>Thesis</option>
+                                <option>Research</option>
+                            </select> -->
+                            <select id="ComboBox" multiple>
+                                <!-- Các tùy chọn sẽ được điền vào đây sau khi lấy dữ liệu -->
+                            </select>
+                            <div class="uploadimage">
+                                <i class="icofont-eye-alt-alt"></i>
+                                <label class="fileContainer">
+                                    <input type="file">Upload File
+                                </label>
+                            </div>
+
+                            <button type="submit" class="main-btn">Post</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ask question -->
+
+
+
+
+        <div class="share-wraper">
+            <div class="share-options">
+                <span class="close-btn"><i class="icofont-close-circled"></i></span>
+                <h5><i>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-share">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <polyline points="16 6 12 2 8 6"></polyline>
+                            <line x1="12" y1="2" x2="12" y2="15"></line>
+                        </svg></i>Share
+                    To!
+                </h5>
+                <form method="post">
+                    <textarea placeholder="Write Something"></textarea>
+                </form>
+                <ul>
+                    <li><a title="" href="#">Your Timeline</a></li>
+                    <li class="friends"><a title="" href="#">To Friends</a></li>
+                    <li class="socialz"><a class="active" title="" href="#">Social Media</a></li>
+                </ul>
+                <div style="display: block;" class="social-media">
+                    <ul>
+                        <li><a title="" href="#" class="facebook"><i class="icofont-facebook"></i></a></li>
+                        <li><a title="" href="#" class="twitter"><i class="icofont-twitter"></i></a></li>
+                        <li><a title="" href="#" class="instagram"><i class="icofont-instagram"></i></a></li>
+                        <li><a title="" href="#" class="pinterest"><i class="icofont-pinterest"></i></a></li>
+                        <li><a title="" href="#" class="youtube"><i class="icofont-youtube"></i></a></li>
+                        <li><a title="" href="#" class="dribble"><i class="icofont-dribbble"></i></a></li>
+                        <li><a title="" href="#" class="behance"><i class="icofont-behance-original"></i></a></li>
+                    </ul>
+                </div>
+                <div style="display: none;" class="friends-to">
+                    <div class="follow-men">
+                        <figure><img class="mCS_img_loaded" src="images/resources/user1.jpg" alt=""></figure>
+                        <div class="follow-meta">
+                            <h5><a href="#" title="">Jack Carter</a></h5>
+                            <span>family member</span>
+                        </div>
+                        <a href="#" title="">Share</a>
+                    </div>
+                    <div class="follow-men">
+                        <figure><img class="mCS_img_loaded" src="images/resources/user2.jpg" alt=""></figure>
+                        <div class="follow-meta">
+                            <h5><a href="#" title="">Xang Ching</a></h5>
+                            <span>Close Friend</span>
+                        </div>
+                        <a href="#" title="">Share</a>
+                    </div>
+                    <div class="follow-men">
+                        <figure><img class="mCS_img_loaded" src="images/resources/user3.jpg" alt=""></figure>
+                        <div class="follow-meta">
+                            <h5><a href="#" title="">Emma Watson</a></h5>
+                            <span>Matul Friend</span>
+                        </div>
+                        <a href="#" title="">Share</a>
+                    </div>
+                </div>
+                <button type="submit" class="main-btn">Publish</button>
+            </div>
+        </div>
+        <!-- share post -->
+
+
+        <div class="modal fade" id="img-comt">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="row merged">
+                            <div class="col-lg-9">
+                                <div class="pop-image">
+                                    <div class="pop-item">
+                                        <div class="action-block">
+                                            <a class="action-button">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="feather feather-tag">
+                                                    <path
+                                                        d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                                                    <line x1="7" y1="7" x2="7.01" y2="7" />
+                                                </svg>
+                                            </a>
+                                            <a class="action-button">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="feather feather-map-pin">
+                                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                                    <circle cx="12" cy="10" r="3" />
+                                                </svg>
+                                            </a>
+                                            <a class="action-button">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="feather feather-arrow-down">
+                                                    <line x1="12" y1="5" x2="12" y2="19" />
+                                                    <polyline points="19 12 12 19 5 12" />
+                                                </svg>
+                                            </a>
+                                            <a class="action-button">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="feather feather-more-vertical">
+                                                    <circle cx="12" cy="12" r="1" />
+                                                    <circle cx="12" cy="5" r="1" />
+                                                    <circle cx="12" cy="19" r="1" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                        <figure><img src="images/resources/blog-detail.jpg" alt=""></figure>
+                                        <div class="stat-tools">
+                                            <div class="box">
+                                                <div class="Like">
+                                                    <form id="likeForm">
+                                                        <button type="submit" class="Like__link like-button"
+                                                            id="post-id">
+                                                            <i class="icofont-like"></i> Like
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <a title="" href="#" class="share-to"><i class="icofont-share-alt"></i>
+                                                Share</a>
+                                            <div class="emoji-state">
+                                                <div class="popover_wrapper">
+                                                    <a class="popover_title" href="#" title=""><img alt=""
+                                                            src="images/smiles/thumb.png"></a>
+                                                    <div class="popover_content">
+                                                        <span><img alt="" src="images/smiles/thumb.png"> Likes</span>
+                                                        <ul class="namelist">
+                                                            <li>Jhon Doe</li>
+                                                            <li>Amara Sin</li>
+                                                            <li>Sarah K.</li>
+                                                            <li><span>20+ more</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="popover_wrapper">
+                                                    <a class="popover_title" href="#" title=""><img alt=""
+                                                            src="images/smiles/heart.png"></a>
+                                                    <div class="popover_content">
+                                                        <span><img alt="" src="images/smiles/heart.png"> Love</span>
+                                                        <ul class="namelist">
+                                                            <li>Amara Sin</li>
+                                                            <li>Jhon Doe</li>
+                                                            <li><span>10+ more</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="popover_wrapper">
+                                                    <a class="popover_title" href="#" title=""><img alt=""
+                                                            src="images/smiles/smile.png"></a>
+                                                    <div class="popover_content">
+                                                        <span><img alt="" src="images/smiles/smile.png"> Happy</span>
+                                                        <ul class="namelist">
+                                                            <li>Sarah K.</li>
+                                                            <li>Jhon Doe</li>
+                                                            <li>Amara Sin</li>
+                                                            <li><span>100+ more</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="popover_wrapper">
+                                                    <a class="popover_title" href="#" title=""><img alt=""
+                                                            src="images/smiles/weep.png"></a>
+                                                    <div class="popover_content">
+                                                        <span><img alt="" src="images/smiles/weep.png"> Dislike</span>
+                                                        <ul class="namelist">
+                                                            <li>Danial Carbal</li>
+                                                            <li>Amara Sin</li>
+                                                            <li>Sarah K.</li>
+                                                            <li><span>15+ more</span></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <p>10+</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="commentbar">
+                                    <div class="user">
+                                        <figure><img src="images/resources/user1.jpg" alt=""></figure>
+                                        <div class="user-information">
+                                            <h4><a href="#" title="">Danile Walker</a></h4>
+                                            <span>2 hours ago</span>
+                                        </div>
+                                        <a href="#" title="Follow" data-ripple="">Follow</a>
+                                    </div>
+                                    <div class="we-video-info">
+                                        <ul>
+                                            <li>
+                                                <span title="Comments" class="liked">
+                                                    <i>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" class="feather feather-thumbs-up">
+                                                            <path
+                                                                d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3">
+                                                            </path>
+                                                        </svg></i>
+                                                    <ins>52</ins>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span title="Comments" class="comment">
+                                                    <i>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            class="feather feather-message-square">
+                                                            <path
+                                                                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z">
+                                                            </path>
+                                                        </svg></i>
+                                                    <ins>52</ins>
+                                                </span>
+                                            </li>
+
+                                            <li>
+                                                <span>
+                                                    <a title="Share" href="#" class="">
+                                                        <i>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="16" viewBox="0 0 24 24" fill="none"
+                                                                stroke="currentColor" stroke-width="2"
+                                                                stroke-linecap="round" stroke-linejoin="round"
+                                                                class="feather feather-share-2">
+                                                                <circle cx="18" cy="5" r="3"></circle>
+                                                                <circle cx="6" cy="12" r="3"></circle>
+                                                                <circle cx="18" cy="19" r="3"></circle>
+                                                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                                            </svg></i>
+                                                    </a>
+                                                    <ins>20</ins>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <div class="users-thumb-list">
+                                            <a href="#" title="" data-toggle="tooltip" data-original-title="Anderw">
+                                                <img src="images/resources/userlist-1.jpg" alt="">
+                                            </a>
+                                            <a href="#" title="" data-toggle="tooltip" data-original-title="frank">
+                                                <img src="images/resources/userlist-2.jpg" alt="">
+                                            </a>
+                                            <a href="#" title="" data-toggle="tooltip" data-original-title="Sara">
+                                                <img src="images/resources/userlist-1.jpg" alt="">
+                                            </a>
+                                            <a href="#" title="" data-toggle="tooltip" data-original-title="Amy">
+                                                <img src="images/resources/userlist-2.jpg" alt="">
+                                            </a>
+                                            <span><strong>You</strong>, <b>Sarah</b> and <a title="" href="#">24+
+                                                    more</a> liked</span>
+                                        </div>
+                                    </div>
+                                    <div class="new-comment" style="display: block;">
+                                        <form method="post">
+                                            <input type="text" placeholder="write comment">
+                                            <button type="submit"><i class="icofont-paper-plane"></i></button>
+                                        </form>
+                                        <div class="comments-area">
+                                            <ul>
+                                                <li>
+                                                    <figure><img alt="" src="images/resources/user1.jpg"></figure>
+                                                    <div class="commenter">
+                                                        <h5><a title="" href="#">Jack Carter</a></h5>
+                                                        <span>2 hours ago</span>
+                                                        <p>
+                                                            i think that some how, we learn who we really are and then
+                                                            live with that decision, great post!
+                                                        </p>
+                                                        <span>you can view the more detail via link</span>
+                                                        <a title=""
+                                                            href="#">https://www.youtube.com/watch?v=HpZgwHU1GcI</a>
+                                                    </div>
+                                                    <a title="Like" href="#"><i class="icofont-heart"></i></a>
+                                                    <a title="Reply" href="#" class="reply-coment"><i
+                                                            class="icofont-reply"></i></a>
+                                                </li>
+                                                <li>
+                                                    <figure><img alt="" src="images/resources/user2.jpg"></figure>
+                                                    <div class="commenter">
+                                                        <h5><a title="" href="#">Ching xang</a></h5>
+                                                        <span>2 hours ago</span>
+                                                        <p>
+                                                            i think that some how, we learn who we really are and then
+                                                            live with that decision, great post!
+                                                        </p>
+                                                    </div>
+                                                    <a title="Like" href="#"><i class="icofont-heart"></i></a>
+                                                    <a title="Reply" href="#" class="reply-coment"><i
+                                                            class="icofont-reply"></i></a>
+                                                </li>
+                                                <li>
+                                                    <figure><img alt="" src="images/resources/user3.jpg"></figure>
+                                                    <div class="commenter">
+                                                        <h5><a title="" href="#">Danial Comb</a></h5>
+                                                        <span>2 hours ago</span>
+                                                        <p>
+                                                            i think that some how, we learn who we really are and then
+                                                            live with that decision, great post!
+                                                        </p>
+                                                    </div>
+                                                    <a title="Like" href="#"><i class="icofont-heart"></i></a>
+                                                    <a title="Reply" href="#" class="reply-coment"><i
+                                                            class="icofont-reply"></i></a>
+                                                </li>
+                                                <li>
+                                                    <figure><img alt="" src="images/resources/user4.jpg"></figure>
+                                                    <div class="commenter">
+                                                        <h5><a title="" href="#">Jack Carter</a></h5>
+                                                        <span>2 hours ago</span>
+                                                        <p>
+                                                            i think that some how, we learn who we really are and then
+                                                            live with that decision, great post!
+                                                        </p>
+                                                    </div>
+                                                    <a title="Like" href="#"><i class="icofont-heart"></i></a>
+                                                    <a title="Reply" href="#" class="reply-coment"><i
+                                                            class="icofont-reply"></i></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- The Scrolling Modal image with comment -->
+
+
+    </div>
+
+    <script src="js/main.min.js"></script><!-- vendors merged files -->
+    <script src="js/date-time.js"></script>
+    <script src="js/script.js"></script><!-- custom scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="module" src="js/index-page.js"></script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
+
+</body>
+
+</html>
